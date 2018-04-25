@@ -1,4 +1,3 @@
-console.log("engine");
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
@@ -94,7 +93,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+
+        allPlayers[currentPlayer].update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -121,7 +121,7 @@ var Engine = (function(global) {
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.clearRect(0,0,canvas.width,canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -155,7 +155,7 @@ var Engine = (function(global) {
             enemy.render();
         });
 
-        player.render();
+        allPlayers[currentPlayer].render();
     }
 
     /* This function does nothing but it could have been a good place to
