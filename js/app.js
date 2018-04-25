@@ -1,14 +1,7 @@
-// Enemies our player must avoid
-console.log("app");
+//------- Enemies-------
 class Enemy {
   constructor(){
     this.reset();
-    // speed/vel....3-
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
   }
 
@@ -17,13 +10,12 @@ class Enemy {
     allPlayers[currentPlayer].y + 73 <= this.y + 135 &&
     allPlayers[currentPlayer].x + 25 <= this.x + 88 &&
     allPlayers[currentPlayer].x + 76 >= this.x + 11) {
-      console.log('collision');
       collisionReset();
     }else if (allPlayers[currentPlayer].y<20) {
-      console.log('won');
-      if (currentPlayer<3){
-        currentPlayer++;
-      }else {
+      if (currentPlayer>0){
+        currentPlayer--; //next player
+        allPlayers[currentPlayer].reset(); //bring the next player to the center
+      }else { //this is the last player
         if(gameStatus==="playing"){ //ensures this is excuted only once
           document.removeEventListener('keyup', keyupListner);
           gameStatus="winning";
@@ -43,7 +35,6 @@ class Enemy {
     this.velocity = Math.floor(Math.random() * 300) + 180;
   }
 
-  // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
   update(dt) {
     this.x= this.x+this.velocity*dt;
@@ -51,9 +42,6 @@ class Enemy {
           this.reset();
     }
     this.checkCollision();
-      // You should multiply any movement by the dt parameter
-      // which will ensure the game runs at the same speed for
-      // all computers.
   }
 
   // Draw the enemy on the screen, required method for game
@@ -63,43 +51,46 @@ class Enemy {
 }
 
 
-// Now write your own player class
-
+//----------players-------------
 
 class Player{
-  constructor(img){
+  constructor(n,img){
+    this.order=n;
     this.reset();
     this.sprite = img;
     console.log(this);
   }
 
   reset(){
-    this.x = 300; //-----------start in center
-    this.y = 460; //-----------start low
+    if(currentPlayer===this.order){
+      this.x = 300;
+      if(this.order===3){ //first player
+        this.y=377;
+      }else{
+        this.y = 460;
+      }
+    }else {
+      this.x = 0+(this.order*100); //position the players waiting to be saved side by side
+      this.y = 460;
+    }
   }
 
   handleInput(key){
     if(key==='up'&& this.y > 0){
       this.y-=83;
-    }else if (key==='right'&& this.x < 400) {
+    }else if (key==='right'&& this.x < 600) {
       this.x+=100;
     }else if (key==='left'&& this.x > 0) {
       this.x-=100;
     }else if (key==='down'&& this.y < 600) {
       this.y+=83;
     }
-    //console.log(this.x +"  and  "+this.y);
   }
-  // Update the enemy's position, required method for game
-  // Parameter: dt, a time delta between ticks
+
   update(dt) {
 
-      // You should multiply any movement by the dt parameter
-      // which will ensure the game runs at the same speed for
-      // all computers.
   }
 
-  // Draw the enemy on the screen, required method for game
   render(){
       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
@@ -123,7 +114,7 @@ function collisionReset(){ //resets player position after collision
 
 function restartGame(){
   gameStatus="playing";
-  currentPlayer=0;
+  currentPlayer=3;
   lives = 3;
   updateLives();
   allPlayers.forEach(function(element) {
@@ -146,33 +137,37 @@ function updateLives(){
 
   $("#lives").html(s);
 }
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
+
+// ----instantiate objects---------
+//Enemies
 let allEnemies=[];
 
 for (let i=0; i<5; i++){
   allEnemies.push(new Enemy());
 }
 
-// Place all player objects in an array called allEnemies
+// Players
 let allPlayers = [];
-let playersImgs = ['images/char-boy.png',//'images/char-boy.png','images/char-boy.png','images/char-boy.png'];
-'images/char-boy.png',
-'images/char-boy.png',
-'images/char-boy.png'];
-let currentPlayer = 0;
+
+let currentPlayer = 3;
+
+let charImgs = ['images/char-princess-girl.png',
+  'images/char-boy.png',
+  'images/char-catgirl.png',
+  'images/char-horn-girl.png'];
 
 for (let i=0; i<4; i++){
-  allPlayers.push(new Player(playersImgs[i]));
+  allPlayers.push(new Player(i,charImgs[i]));
 }
-// Place the player object in a variable called player
-//let player = new Player();
+
+//----- supporting variables ----
+
+let gameStatus="playing";
 
 let lives = 3;
 updateLives();
 
-let gameStatus="playing";
-// This listens for key presses and sends the keys to your
+// -----This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', keyupListner);
 
@@ -187,17 +182,18 @@ function keyupListner(e){
   allPlayers[currentPlayer].handleInput(allowedKeys[e.keyCode]);
 }
 
+//------Alerts for the 2 outcomes: winning and losing
 let finishOutcomes = [{
-  title: 'oops!',
-  html: '<p>You dead</p>',
-  confirmButtonColor: '#8cd0e8',
+  title: 'Oh no!',
+  html: "<p>Looks like the bugs won this round</p>",
+  confirmButtonColor: '#9ada75',
   confirmButtonText: 'Restart Game',
   allowOutsideClick: false
 },
 {
-  title: 'Congrats!',
-  html: '<p>You finished the game</p>',
-  confirmButtonColor: '#8cd0e8',
+  title: 'What a hero!',
+  html: "<p>You've saved everyone</p>",
+  confirmButtonColor: '#9ada75',
   confirmButtonText: 'New Game',
   allowOutsideClick: false
 }];

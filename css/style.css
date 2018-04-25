@@ -1,12 +1,18 @@
 body {
   text-align: center;
   background: black;
+  font-family: 'Gugi', cursive;
+  color: white;
 }
 
 h1 {
-  color: white;
   font-size: 40pt;
-  font-family: 'Gaegu', cursive;
+  margin: 0;
+}
+
+.instructions {
+  font-size: 12pt;
+  margin: 3px;
 }
 
 .board {
@@ -18,7 +24,7 @@ h1 {
   height: 50px;
   background: #9ada75;
   padding: 5px;
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 5px;
 }
 
 .lives {
@@ -28,8 +34,4 @@ h1 {
 .hearts {
   height: 50px;
   width: auto;
-}
-
-canvas {
-  margin-top: 0;
 }
