@@ -3,12 +3,19 @@
 ## Table of Contents
 
 * [Introduction](#Introduction)
+* [Installation](#Installation)
 * [Play](#Play)
 * [Contributing](#contributing)
 
 ## Introduction
 This is an arcade game developed as a project for Udacity's Front-End Web Developer Nanodegree.
 
+## Installation
+To run this game you would need to do the following:
+- Download of clone this git repository
+- The downloaded/cloned project folder on your PC will contain all files and resources
+- Open the 'index.html' file with your preferred web browser
+- If the game is not working, make sure your browser is up to date
 
 ## Play
 ### Steps
